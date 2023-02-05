@@ -70,7 +70,7 @@ public class UserRepository implements DAO<User, Integer> {
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         try(Connection connection = ConnectionManager.getConnection()) {
-            String sql = "select * from users";
+            String sql = "select * from users order by id";
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
@@ -91,7 +91,7 @@ public class UserRepository implements DAO<User, Integer> {
     public Optional<User> updateById(User user, Integer id) {
         Optional<User> optionalUser = Optional.empty();
         try(Connection connection = ConnectionManager.getConnection()) {
-            String sql = "update users set (email = ?, password = ?, address = ?) where id = ?";
+            String sql = "update users set email = ?, password = ?, address = ? where id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, user.getEmail());
             stmt.setString(2, user.getPassword());
@@ -112,10 +112,9 @@ public class UserRepository implements DAO<User, Integer> {
 
     @Override
     public Optional<User> deleteById(Integer id) {
-        Optional<User> optionalUser = Optional.empty();
+        Optional<User> optionalUser = getById(id);
 
         try(Connection connection = ConnectionManager.getConnection()) {
-            optionalUser = getById(id);
             if(!optionalUser.isPresent()) return optionalUser;
 
             String sql = "delete from users where id = ?";
@@ -123,7 +122,6 @@ public class UserRepository implements DAO<User, Integer> {
             stmt.setInt(1, id);
 
             int affectedRows = stmt.executeUpdate();
-
             if(affectedRows == 0) throw new SQLException("Delete user failed, no rows affected.");
         } catch (SQLException e) {
             log.error(e.getMessage());
