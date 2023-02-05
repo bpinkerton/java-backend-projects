@@ -15,11 +15,12 @@ public class HomeController implements HttpHandler {
         switch(exchange.getRequestMethod()){
             case "GET": response = "Welcome to the Open Reservation Service";
                 exchange.sendResponseHeaders(200, response.length());
-                exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
                 break;
             default: response = "Method not allowed.";
                 exchange.sendResponseHeaders(405, response.length());
-                exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
+
         }
+        exchange.getResponseBody().write(response.getBytes(StandardCharsets.UTF_8));
+        exchange.close();
     }
 }
