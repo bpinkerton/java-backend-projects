@@ -1,10 +1,13 @@
 package com.revature.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.controller.HomeController;
+import com.revature.controller.UserController;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.net.httpserver.HttpServerImpl;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,12 +16,15 @@ import java.util.Map;
 
 
 
-public class HttpConfig{
+public class HttpConfig {
     private static final Logger log = LoggerFactory.getLogger(HttpConfig.class);
-    private static final Map<String, HttpHandler> routes = new HashMap<>();;
+    private static final Map<String, HttpHandler> routes = new HashMap<>();
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         routes.put("/", new HomeController());
+        routes.put("/users", new UserController(objectMapper));
     }
 
     public static HttpServer getHttpServer(int port) throws IOException {
