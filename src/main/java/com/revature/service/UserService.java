@@ -8,7 +8,15 @@ import java.util.List;
 
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository;
+
+    public UserService() {
+        userRepository = new UserRepository();
+    }
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public User createUser(User user){
         return userRepository.create(user).orElseThrow(RuntimeException::new);
