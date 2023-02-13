@@ -19,12 +19,13 @@ import java.util.Map;
 public class HttpConfig {
     private static final Logger log = LoggerFactory.getLogger(HttpConfig.class);
     private static final Map<String, HttpHandler> routes = new HashMap<>();
-
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ApplicationContext applicationContext;
 
     static {
-        routes.put("/", new HomeController());
-        routes.put("/users", new UserController(objectMapper));
+        applicationContext = new ApplicationContext();
+
+        routes.put("/", applicationContext.getHomeController());
+        routes.put("/users", applicationContext.getUserController());
     }
 
     public static HttpServer getHttpServer(int port) throws IOException {

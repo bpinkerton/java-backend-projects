@@ -20,9 +20,9 @@ public class UserController implements HttpHandler {
     private final ObjectMapper objectMapper;
     private final UserService userService;
 
-    public UserController(ObjectMapper objectMapper) {
+    public UserController(ObjectMapper objectMapper, UserService userService) {
         this.objectMapper = objectMapper;
-        this.userService = new UserService();
+        this.userService = userService;
     }
 
     @Override
