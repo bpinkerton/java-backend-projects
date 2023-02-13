@@ -1,5 +1,6 @@
 package com.revature.service;
 
+import com.revature.exception.ResourceNotCreatedException;
 import com.revature.exception.ResourceNotFoundException;
 import com.revature.model.User;
 import com.revature.repository.UserRepository;
@@ -19,7 +20,7 @@ public class UserService {
     }
 
     public User createUser(User user){
-        return userRepository.create(user).orElseThrow(RuntimeException::new);
+        return userRepository.create(user).orElseThrow(() -> new ResourceNotCreatedException(User.class.getSimpleName()));
     }
 
     public User getUserById(Integer id){
